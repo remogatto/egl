@@ -22,10 +22,16 @@ func Terminate(
 		C.EGLDisplay(unsafe.Pointer(disp))))
 }
 func GetDisplay(
-	displayID NativeDisplayType) Display {
+	displayID int) Display {
 	return Display(C.eglGetDisplay(
-		C.EGLNativeDisplayType(unsafe.Pointer(displayID))))
+		C.EGLNativeDisplayType(unsafe.Pointer(nil))))
 }
+
+// func GetDisplay(
+// 	displayID NativeDisplayType) Display {
+// 	return Display(C.eglGetDisplay(
+// 		C.EGLNativeDisplayType(unsafe.Pointer(displayID))))
+// }
 func QueryString(
 	disp Display, name int32) string {
 	return C.GoString(C.eglQueryString(

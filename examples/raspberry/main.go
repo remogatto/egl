@@ -3,12 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/BurntSushi/xgbutil"
-	"github.com/BurntSushi/xgbutil/mousebind"
-	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/mortdeus/mathgl"
 	"github.com/remogatto/egl"
-	platform "github.com/remogatto/egl/platforms/xorg"
+	platform "github.com/remogatto/egl/platforms/raspberry"
 	gl "github.com/remogatto/opengles2"
 	"log"
 	"math"
@@ -16,20 +13,16 @@ import (
 )
 
 const (
-	INITIAL_WINDOW_WIDTH = 640
-	INITIAL_WINDOW_HEIGHT = 480
+	INITIAL_WINDOW_WIDTH = 1920
+	INITIAL_WINDOW_HEIGHT = 1080
 )
 
 var (
-	X                                      *xgbutil.XUtil
-	Done                                   = make(chan bool, 1)
 	verticesArrayBuffer, colorsArrayBuffer uint32
-	redraw                                 = true
 	attrPos, attrColor                     uint32
 	viewRotX                               float32
 	viewRotY                               float32
 	uMatrix                                int32
-	currWidth, currHeight int
 
 	vertices = [12]float32{
 		-1.0, -1.0, 0.0, 1.0,
@@ -41,6 +34,7 @@ var (
 		0.0, 1.0, 0.0, 1.0,
 		0.0, 0.0, 1.0, 1.0,
 	}
+	currWidth, currHeight = INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT
 )
 
 func check() {
@@ -51,17 +45,8 @@ func check() {
 }
 
 func initialize() {
-	X, err := xgbutil.NewConn()
-	if err != nil {
-		log.Fatal(err)
-	}
-	mousebind.Initialize(X)
-	xWindow := newWindow(X, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
-	go xevent.Main(X)
-	platform.Initialize(
-		egl.NativeWindowType(uintptr(xWindow.Id)),
-		platform.DefaultConfigAttributes,
-		platform.DefaultContextAttributes)
+	egl.BCMHostInit()
+	platform.Initialize(platform.DefaultConfigAttributes, platform.DefaultContextAttributes)
 	gl.Viewport(0, 0, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
 	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
 	initShaders()
@@ -114,7 +99,6 @@ func cleanup() {
 }
 
 func reshape(width, height int) {
-	currWidth, currHeight = width, height
 	gl.Viewport(0, 0, gl.Sizei(width), gl.Sizei(height))
 }
 
@@ -151,12 +135,7 @@ func main() {
 	}
 	defer cleanup()
 	for {
-		select {
-		case <-Done:
-			return
-		default:
-			draw(currWidth, currHeight)
-			egl.SwapBuffers(platform.Display, platform.Surface)
-		}
+		draw(currWidth, currHeight)
+		egl.SwapBuffers(platform.Display, platform.Surface)
 	}
 }
