@@ -9,6 +9,7 @@ import "C"
 import (
 	"unsafe"
 )
+
 type (
 	Enum              uint32
 	Config            uintptr

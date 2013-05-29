@@ -2,7 +2,6 @@ package platform
 
 import (
 	"github.com/remogatto/egl"
-	"unsafe"
 )
 
 var (
@@ -29,7 +28,7 @@ var (
 )
 
 func Initialize(window egl.NativeWindowType, configAttr, contextAttr []int32) {
-	Display = egl.GetDisplay(egl.NativeDisplayType(unsafe.Pointer(nil)))
+	Display = egl.GetDisplay(egl.DEFAULT_DISPLAY)
 	if ok := egl.Initialize(Display, nil, nil); !ok {
 		egl.LogError(egl.GetError())
 	}
