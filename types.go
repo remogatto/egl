@@ -1,14 +1,14 @@
 package egl
 
 /*
-#cgo pkg-config: egl
 #include <stdlib.h>
 #include <EGL/egl.h>
 #include <EGL/eglplatform.h>
 */
 import "C"
-import "unsafe"
-
+import (
+	"unsafe"
+)
 type (
 	Enum              uint32
 	Config            uintptr
