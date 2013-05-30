@@ -27,7 +27,7 @@ embedded systems like the Raspberry PI.
 The package aims to be multiplatform. To achive this result two
 approach are used: [build constraints](http://golang.org/pkg/go/build)
 and per-platform/per-implementation initialization [boilerplate
-code](platforms/). By default egl will use the xorg implementation.
+code](platform/). By default egl will use the xorg implementation.
 
 ~~~bash
 $ go get github.com/remogatto/egl # use xorg by default
@@ -49,9 +49,9 @@ Please refer to the [examples](examples/).
 * Add support for other platforms
 * Add tests
 
-# Thanks
+# Credits
 
-* Roger Roach for his [egl/opengles](https://github.com/mortdeus/egles) libraries.
+Thanks to Roger Roach for his [egl/opengles](https://github.com/mortdeus/egles) libraries. I stole a lot from his repository!
 
 # License
 
