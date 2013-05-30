@@ -8,6 +8,7 @@ import (
 	"github.com/BurntSushi/xgbutil/mousebind"
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/BurntSushi/xgbutil/xwindow"
+	"github.com/remogatto/application"
 	"log"
 )
 
@@ -29,7 +30,7 @@ func newWindow(X *xgbutil.XUtil, width, height int) *xwindow.Window {
 			mousebind.Detach(w.X, w.Id)
 			// w.Destroy()
 			xevent.Quit(X)
-			Done <- true
+			application.Exit()
 		})
 
 	// In order to get ConfigureNotify events, we must listen to the window

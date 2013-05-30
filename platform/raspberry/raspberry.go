@@ -34,7 +34,7 @@ func assert(cond bool) {
 }
 
 func Initialize(configAttr, contextAttr []int32) {
-	platform.Display = egl.GetDisplay(0)
+	platform.Display = egl.GetDisplay(egl.DEFAULT_DISPLAY)
 	if ok := egl.Initialize(platform.Display, nil, nil); !ok {
 		egl.LogError(egl.GetError())
 	}
@@ -45,7 +45,7 @@ func Initialize(configAttr, contextAttr []int32) {
 		egl.LogError(egl.GetError())
 	}
 	egl.BindAPI(egl.OPENGL_ES_API)
-	Context = egl.CreateContext(platform.Display, platform.Config, egl.NO_CONTEXT, &contextAttr[0])
+	platform.Context = egl.CreateContext(platform.Display, platform.Config, egl.NO_CONTEXT, &contextAttr[0])
 	screen_width, screen_height = egl.GraphicsGetDisplaySize(0)
 	log.Printf("Display size W: %d H: %d\n", screen_width, screen_height)
 

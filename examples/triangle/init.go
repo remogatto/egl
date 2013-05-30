@@ -8,7 +8,6 @@ import (
 	"github.com/BurntSushi/xgbutil/xevent"
 	"github.com/remogatto/egl"
 	"github.com/remogatto/egl/platform/xorg"
-	gl "github.com/remogatto/opengles2"
 	"log"
 )
 
@@ -31,7 +30,4 @@ func initialize() {
 		egl.NativeWindowType(uintptr(xWindow.Id)),
 		xorg.DefaultConfigAttributes,
 		xorg.DefaultContextAttributes)
-	gl.Viewport(0, 0, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
-	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
-	initShaders()
 }

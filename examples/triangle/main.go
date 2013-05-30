@@ -3,14 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/remogatto/application"
 	"github.com/remogatto/egl"
 	"github.com/remogatto/egl/platform"
 	gl "github.com/remogatto/opengles2"
 	"log"
+	"runtime"
+	"time"
 )
 
+const FRAMES_PER_SECOND = 24
+
 var (
-	Done                                   = make(chan bool, 1)
 	verticesArrayBuffer, colorsArrayBuffer uint32
 	attrPos, attrColor                     uint32
 	currWidth, currHeight                  int
@@ -26,6 +30,60 @@ var (
 		0.0, 0.0, 1.0, 1.0,
 	}
 )
+
+// emulatorLoop sends a cmdRenderFrame command to the rendering backend
+// (displayLoop) each 1/50 second.
+type renderLoop struct {
+	ticker           *time.Ticker
+	pause, terminate chan int
+}
+
+// newRenderLoop returns a new renderLoop instance. It takes the
+// number of frame-per-second as argument.
+func newRenderLoop(fps int) *renderLoop {
+	renderLoop := &renderLoop{
+		ticker:    time.NewTicker(time.Duration(1e9 / fps)),
+		pause:     make(chan int),
+		terminate: make(chan int),
+	}
+	return renderLoop
+}
+
+// Pause returns the pause channel of the loop.
+// If a value is sent to this channel, the loop will be paused.
+func (l *renderLoop) Pause() chan int {
+	return l.pause
+}
+
+// Terminate returns the terminate channel of the loop.
+// If a value is sent to this channel, the loop will be terminated.
+func (l *renderLoop) Terminate() chan int {
+	return l.terminate
+}
+
+// Run runs renderLoop.
+// The loop renders a frame and swaps the buffer for each tick
+// received.
+func (l *renderLoop) Run() {
+	runtime.LockOSThread()
+	initialize()
+	gl.Viewport(0, 0, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
+	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
+	initShaders()
+	for {
+		select {
+		case <-l.pause:
+			l.ticker.Stop()
+			l.pause <- 0
+		case <-l.terminate:
+			cleanup()
+			l.terminate <- 0
+		case <-l.ticker.C:
+			draw(currWidth, currHeight)
+			egl.SwapBuffers(platform.Display, platform.Surface)
+		}
+	}
+}
 
 func check() {
 	error := gl.GetError()
@@ -82,18 +140,11 @@ func printInfo() {
 func main() {
 	info := flag.Bool("info", false, "display OpenGL renderer info")
 	flag.Parse()
-	initialize()
 	if *info {
 		printInfo()
 	}
-	defer cleanup()
-	for {
-		select {
-		case <-Done:
-			return
-		default:
-			draw(currWidth, currHeight)
-			egl.SwapBuffers(platform.Display, platform.Surface)
-		}
-	}
+	application.Register("render loop", newRenderLoop(FRAMES_PER_SECOND))
+	exitCh := make(chan bool, 1)
+	application.Run(exitCh)
+	<-exitCh
 }
