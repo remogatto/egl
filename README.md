@@ -25,9 +25,9 @@ embedded systems like the Raspberry PI.
 # Install
 
 The package aims to be multiplatform. To achive this result two
-approach are used: build constraints and
-per-platform/per-implementation initialization boilerplate code. By
-default egl will use the xorg implementation.
+approach are used: [build constraints](http://golang.org/pkg/go/build)
+and per-platform/per-implementation initialization [boilerplate
+code](egl/platforms). By default egl will use the xorg implementation.
 
 ~~~bash
 $ go get github.com/remogatto/egl # use xorg by default
@@ -39,6 +39,10 @@ constraint, for example:
 ~~~bash
 % go get github.com/remogatto/egl -tags="raspberry" # install on the raspberry
 ~~~
+
+# Usage
+
+Please refer to the [examples](egl/examples).
 
 # ToDo
 
