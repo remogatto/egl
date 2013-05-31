@@ -10,11 +10,14 @@ import (
 	"log"
 	"runtime"
 	"time"
+	"syscall"
+	"os"
 )
 
 const FRAMES_PER_SECOND = 24
 
 var (
+	signal sigterm
 	verticesArrayBuffer, colorsArrayBuffer uint32
 	attrPos, attrColor                     uint32
 	currWidth, currHeight                  int
@@ -30,6 +33,18 @@ var (
 		0.0, 0.0, 1.0, 1.0,
 	}
 )
+
+// sigterm is a type for handling a SIGTERM signal.
+type sigterm int
+func (h *sigterm) HandleSignal(s os.Signal) {
+	switch ss := s.(type) {
+	case syscall.Signal:
+		switch ss {
+		case syscall.SIGTERM, syscall.SIGINT:
+			application.Exit()
+		}
+	}
+}
 
 // emulatorLoop sends a cmdRenderFrame command to the rendering backend
 // (displayLoop) each 1/50 second.
@@ -144,6 +159,7 @@ func main() {
 		printInfo()
 	}
 	application.Register("render loop", newRenderLoop(FRAMES_PER_SECOND))
+	application.InstallSignalHandler(&signal)
 	exitCh := make(chan bool, 1)
 	application.Run(exitCh)
 	<-exitCh
