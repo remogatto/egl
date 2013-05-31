@@ -13,13 +13,13 @@ import (
 )
 
 const (
-	WINDOW_WIDTH = 640
+	WINDOW_WIDTH  = 640
 	WINDOW_HEIGHT = 480
 )
 
 var (
-	testWin *xwindow.Window
-	X *xgbutil.XUtil
+	testWin    NativeWindowType
+	X          *xgbutil.XUtil
 	configAttr = []int32{
 		egl.RED_SIZE, 8,
 		egl.GREEN_SIZE, 8,
@@ -77,5 +77,5 @@ func initPlatform() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	testWin = openWin(X)
+	testWin = egl.NativeWindowType(uintptr(openWin(X).Id))
 }

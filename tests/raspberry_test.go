@@ -2,6 +2,11 @@
 
 package test
 
+import (
+	"github.com/remogatto/egl"
+	"unsafe"
+)
+
 var (
 	configAttr = []int32{
 		egl.RED_SIZE, 8,
@@ -15,13 +20,14 @@ var (
 		egl.CONTEXT_CLIENT_VERSION, 2,
 		egl.NONE,
 	}
-	dstRect, srcRect            egl.VCRect
-	NativeWindow                egl.EGLDispmanxWindow
+	dstRect, srcRect          egl.VCRect
+	dispmanxTestWin           egl.EGLDispmanxWindow
+	testWin                   egl.NativeWindowType
 	screenWidth, screenHeight uint32
 )
 
-
 func initPlatform() {
+	egl.BCMHostInit()
 	screenWidth, screenHeight = egl.GraphicsGetDisplaySize(0)
 
 	dstRect.X = 0
@@ -49,9 +55,9 @@ func initPlatform() {
 		nil, /*clamp */
 		0 /*transform */)
 
-	NativeWindow.Element = dispman_element
-	NativeWindow.Width = int(screen_width)
-	NativeWindow.Height = int(screen_height)
+	dispmanxTestWin.Element = dispman_element
+	dispmanxTestWin.Width = int(screenWidth)
+	dispmanxTestWin.Height = int(screenHeight)
 	egl.VCDispmanxUpdateSubmitSync(dispman_update)
+	testWin = egl.NativeWindowType(unsafe.Pointer(&dispmanxTestWin))
 }
-

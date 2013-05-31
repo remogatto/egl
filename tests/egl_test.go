@@ -6,12 +6,12 @@ import (
 	"testing"
 )
 
-type testInitEGLSuite struct { pt.Suite }
+type testInitEGLSuite struct{ pt.Suite }
 
 type testCreateEGLContextSuite struct {
-	pt.Suite 
-	display egl.Display
-	config egl.Config
+	pt.Suite
+	display   egl.Display
+	config    egl.Config
 	numConfig int32
 }
 
@@ -24,11 +24,12 @@ func (t *testInitEGLSuite) TestGetDisplay() {
 
 func (t *testInitEGLSuite) TestInitialize() {
 	display := egl.GetDisplay(egl.DEFAULT_DISPLAY)
-	t.True(egl.Initialize(display, nil, nil))}
+	t.True(egl.Initialize(display, nil, nil))
+}
 
 func (t *testInitEGLSuite) TestChooseConfig() {
 	var (
-		config egl.Config
+		config    egl.Config
 		numConfig int32
 	)
 	display := egl.GetDisplay(egl.DEFAULT_DISPLAY)
@@ -37,7 +38,6 @@ func (t *testInitEGLSuite) TestChooseConfig() {
 	t.Equal(numConfig, int32(1))
 	t.True(config != 0)
 }
-
 
 // Test the creation of an EGL context and surface
 
@@ -51,8 +51,8 @@ func (t *testCreateEGLContextSuite) BeforeAll() {
 func (t *testCreateEGLContextSuite) TestCreateContext() {
 	context := egl.CreateContext(
 		t.display,
-		t.config, 
-		egl.NO_CONTEXT, 
+		t.config,
+		egl.NO_CONTEXT,
 		&contextAttr[0])
 	t.True(context != egl.NO_CONTEXT)
 	t.True(context != egl.BAD_MATCH)
@@ -69,12 +69,12 @@ func (t *testCreateEGLContextSuite) TestWindowSurface() {
 	egl.CreateContext(
 		t.display,
 		t.config,
-		egl.NO_CONTEXT, 
+		egl.NO_CONTEXT,
 		&contextAttr[0])
 	surface := egl.CreateWindowSurface(
-		t.display, 
-		t.config, 
-		egl.NativeWindowType(uintptr(testWin.Id)), 
+		t.display,
+		t.config,
+		testWin,
 		nil)
 	t.True(surface != egl.NO_SURFACE)
 }
@@ -84,12 +84,12 @@ func (t *testCreateEGLContextSuite) TestMakeCurrent() {
 	context := egl.CreateContext(
 		t.display,
 		t.config,
-		egl.NO_CONTEXT, 
+		egl.NO_CONTEXT,
 		&contextAttr[0])
 	surface := egl.CreateWindowSurface(
-		t.display, 
-		t.config, 
-		egl.NativeWindowType(uintptr(testWin.Id)), 
+		t.display,
+		t.config,
+		testWin,
 		nil)
 	t.True(egl.MakeCurrent(
 		t.display,
@@ -101,7 +101,7 @@ func (t *testCreateEGLContextSuite) TestMakeCurrent() {
 
 func TestEGL(t *testing.T) {
 	pt.Run(
-		t, 
+		t,
 		new(testInitEGLSuite),
 		new(testCreateEGLContextSuite),
 	)
