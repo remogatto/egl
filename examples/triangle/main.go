@@ -110,8 +110,8 @@ func check() {
 func initShaders() {
 	program := Program(FragmentShader(fsh), VertexShader(vsh))
 	gl.UseProgram(program)
-	attrPos = uint32(gl.GetAttribLocation(program, "pos"))
-	attrColor = uint32(gl.GetAttribLocation(program, "color"))
+	attrPos = gl.GetAttribLocation(program, "pos")
+	attrColor = gl.GetAttribLocation(program, "color")
 	gl.GenBuffers(1, &verticesArrayBuffer)
 	gl.BindBuffer(gl.ARRAY_BUFFER, verticesArrayBuffer)
 	gl.BufferData(gl.ARRAY_BUFFER, gl.SizeiPtr(len(vertices))*4, gl.Void(&vertices[0]), gl.STATIC_DRAW)
