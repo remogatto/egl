@@ -163,11 +163,11 @@ func draw(width, height int) {
 	gl.Viewport(0, 0, gl.Sizei(width), gl.Sizei(height))
 	gl.Clear(gl.COLOR_BUFFER_BIT)
 	gl.BindBuffer(gl.ARRAY_BUFFER, verticesArrayBuffer)
-	gl.VertexAttribPointer(attrPos, 4, gl.FLOAT, false, 6*4, nil)
+	gl.VertexAttribPointer(attrPos, 4, gl.FLOAT, false, 6*4, 0)
 
 	// bind texture - FIX size of vertex
 
-	gl.VertexAttribPointer(attrTexIn, 2, gl.FLOAT, false, 6*4, gl.Void(uintptr(4*4)))
+	gl.VertexAttribPointer(attrTexIn, 2, gl.FLOAT, false, 6*4, 4*4)
 
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, textureBuffer)
