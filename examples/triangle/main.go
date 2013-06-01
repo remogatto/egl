@@ -23,9 +23,9 @@ var (
 	currWidth, currHeight                  int
 
 	vertices = [12]float32{
-		-1.0, -1.0, 0.0, 1.0,
-		1.0, -1.0, 0.0, 1.0,
-		0.0, 1.0, 0.0, 1.0,
+		-0.5, -0.5, 0.0, 1.0,
+		0.5, -0.5, 0.0, 1.0,
+		0.0, 0.5, 0.0, 1.0,
 	}
 	colors = [12]float32{
 		1.0, 0.0, 0.0, 1.0,
@@ -82,8 +82,7 @@ func (l *renderLoop) Terminate() chan int {
 func (l *renderLoop) Run() {
 	runtime.LockOSThread()
 	initialize()
-	gl.Viewport(0, 0, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
-	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
+	reshape(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
 	initShaders()
 	for {
 		select {
@@ -120,6 +119,7 @@ func initShaders() {
 	gl.BufferData(gl.ARRAY_BUFFER, gl.SizeiPtr(len(colors))*4, gl.Void(&colors[0]), gl.STATIC_DRAW)
 	gl.EnableVertexAttribArray(attrPos)
 	gl.EnableVertexAttribArray(attrColor)
+	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
 }
 
 func draw(width, height int) {

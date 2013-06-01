@@ -25,7 +25,7 @@ embedded systems like the Raspberry PI.
 # Install
 
 The package aims to be multiplatform. To achive this result two
-approach are used: [build constraints](http://golang.org/pkg/go/build)
+approaches are used: [build constraints](http://golang.org/pkg/go/build)
 and per-platform/per-implementation initialization [boilerplate
 code](platform/). By default egl will use the xorg implementation.
 
