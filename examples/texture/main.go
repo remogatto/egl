@@ -81,8 +81,7 @@ func (l *renderLoop) Terminate() chan int {
 func (l *renderLoop) Run() {
 	runtime.LockOSThread()
 	initialize()
-	gl.Viewport(0, 0, INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
-	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
+	reshape(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
 	initShaders()
 	for {
 		select {
@@ -157,6 +156,8 @@ func initShaders() {
 	gl.BindTexture(gl.TEXTURE_2D, textureBuffer)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
 	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.Sizei(width), gl.Sizei(height), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Void(&imageBuffer[0]))
+
+	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
 }
 
 func draw(width, height int) {
