@@ -227,12 +227,11 @@ func (c *Cube) Draw() {
 	c.Program.Use()
 	c.Vertices.bind()
 	gl.VertexAttribPointer(c.attrPos, 4, gl.FLOAT, false, SizeOfFloat*6, 0)
+	gl.VertexAttribPointer(c.attrTexIn, 2, gl.FLOAT, false, 6*SizeOfFloat, 4*SizeOfFloat)
 //	gl.VertexAttribPointer(c.attrColor, 4, gl.FLOAT, false, SizeOfFloat*8, SizeOfFloat*4)
 
 	gl.UniformMatrix4fv(int32(c.uniformModel), 1, false, (*float32)(&c.model[0]))
 	gl.UniformMatrix4fv(int32(c.uniformProjectionView), 1, false, (*float32)(&c.projectionView[0]))
-
-	gl.VertexAttribPointer(c.attrTexIn, 2, gl.FLOAT, false, 6*SizeOfFloat, 4*SizeOfFloat)
 	
 	gl.ActiveTexture(gl.TEXTURE0)
 	gl.BindTexture(gl.TEXTURE_2D, c.textureBuffer)

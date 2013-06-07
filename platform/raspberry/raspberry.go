@@ -14,6 +14,7 @@ var (
 		egl.GREEN_SIZE, 8,
 		egl.BLUE_SIZE, 8,
 		egl.ALPHA_SIZE, 8,
+		egl.DEPTH_SIZE, 8,
 		egl.SURFACE_TYPE, egl.WINDOW_BIT,
 		egl.NONE,
 	}

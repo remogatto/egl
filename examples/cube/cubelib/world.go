@@ -55,6 +55,9 @@ func makeView() (mat mathgl.Mat4) {
 
 func NewWorld() *World {
 	gl.Enable(gl.DEPTH_TEST)
+	gl.ClearColor(0.0, 0.0, 0.0, 1.0)
+	gl.Viewport(0, 0, gl.Sizei(INITIAL_WINDOW_WIDTH), gl.Sizei(INITIAL_WINDOW_HEIGHT))
+
 	return &World{
 		objects:    make([]*Cube, 0),
 		projection: makePerspective(60.0, 640.0/480.0, 1.0, 20.0),
@@ -80,3 +83,4 @@ func (w *World) Draw() {
 		obj.Draw()
 	}
 }
+
