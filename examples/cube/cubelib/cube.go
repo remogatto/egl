@@ -108,8 +108,8 @@ func NewCube() *Cube {
 		-1, -1, 1, 1, 0, 0,
 		// Back
 		1, 1, -1, 1, TEX_COORD_MAX, 0,
-		-1, -1, -1, 1, TEX_COORD_MAX, TEX_COORD_MAX,
-		1, -1, -1, 1, 0, TEX_COORD_MAX,
+		-1, -1, -1, 1, 0, TEX_COORD_MAX,
+		1, -1, -1, 1, TEX_COORD_MAX, TEX_COORD_MAX,
 		-1, 1, -1, 1, 0, 0,
 		// Left
 		-1, -1, 1, 1, TEX_COORD_MAX, 0, 
@@ -201,6 +201,10 @@ func (c *Cube) RotateY(angle float32) {
 	c.model.RotationY(angle)
 }
 
+func (c *Cube) RotateZ(angle float32) {
+	c.model.RotationZ(angle)
+}
+
 func (c *Cube) AttachTexture(img image.Image) {
 	bounds := img.Bounds()
 	width, height := bounds.Size().X, bounds.Size().Y
@@ -221,6 +225,14 @@ func (c *Cube) AttachTexture(img image.Image) {
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
 	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.Sizei(width), gl.Sizei(height), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Void(&buffer[0]))
+}
+
+func (c *Cube) AttachTextureFromBuffer(buffer *byte, width, height int) {
+	gl.GenTextures(1, &c.textureBuffer)
+	gl.BindTexture(gl.TEXTURE_2D, c.textureBuffer)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.Sizei(width), gl.Sizei(height), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Void(buffer))
 }
 
 func (c *Cube) Draw() {
