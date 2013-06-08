@@ -227,12 +227,12 @@ func (c *Cube) AttachTexture(img image.Image) {
 	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.Sizei(width), gl.Sizei(height), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Void(&buffer[0]))
 }
 
-func (c *Cube) AttachTextureFromBuffer(buffer *byte, width, height int) {
+func (c *Cube) AttachTextureFromBuffer(buffer []byte, width, height int) {
 	gl.GenTextures(1, &c.textureBuffer)
 	gl.BindTexture(gl.TEXTURE_2D, c.textureBuffer)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
 	gl.TexParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.Sizei(width), gl.Sizei(height), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Void(buffer))
+	gl.TexImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.Sizei(width), gl.Sizei(height), 0, gl.RGBA, gl.UNSIGNED_BYTE, gl.Void(&buffer[0]))
 }
 
 func (c *Cube) Draw() {
