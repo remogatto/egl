@@ -47,5 +47,4 @@ func Initialize() {
 		xorg.DefaultContextAttributes)
 
 	reshaper.Resize(INITIAL_WINDOW_WIDTH, INITIAL_WINDOW_HEIGHT)
-	gl.Clear(gl.COLOR_BUFFER_BIT)
 }
