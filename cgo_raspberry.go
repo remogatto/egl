@@ -5,4 +5,3 @@ package egl
 #cgo LDFLAGS:  -L/opt/vc/lib -lGLESv2
 */
 import "C"
-

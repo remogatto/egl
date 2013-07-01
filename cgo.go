@@ -8,4 +8,3 @@ package egl
 #include <EGL/eglplatform.h>
 */
 import "C"
-

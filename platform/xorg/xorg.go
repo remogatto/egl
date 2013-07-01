@@ -1,8 +1,8 @@
 package xorg
 
 import (
-	"github.com/remogatto/egl/platform"
 	"github.com/remogatto/egl"
+	"github.com/remogatto/egl/platform"
 )
 
 var (
@@ -52,5 +52,7 @@ func Initialize(window egl.NativeWindowType, configAttr, contextAttr []int32) {
 	if ok := egl.GetConfigAttrib(platform.Display, platform.Config, egl.SURFACE_TYPE, &val); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if (val & egl.WINDOW_BIT) == 0 { panic("No WINDOW_BIT") }
+	if (val & egl.WINDOW_BIT) == 0 {
+		panic("No WINDOW_BIT")
+	}
 }

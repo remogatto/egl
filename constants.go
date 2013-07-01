@@ -7,7 +7,7 @@ package egl
 import "C"
 
 var (
-	DEFAULT_DISPLAY = NativeDisplayType(uintptr(0))	
+	DEFAULT_DISPLAY = NativeDisplayType(uintptr(0))
 )
 
 const (
@@ -27,10 +27,10 @@ const (
 	//TRUE  = 1
 
 	/* Out-of-band handle values */
-//	DEFAULT_DISPLAY = NativeDisplayType(uintptr(0))
-	NO_CONTEXT      = 0
-	NO_DISPLAY      = 0
-	NO_SURFACE      = 0
+	//	DEFAULT_DISPLAY = NativeDisplayType(uintptr(0))
+	NO_CONTEXT = 0
+	NO_DISPLAY = 0
+	NO_SURFACE = 0
 
 	/* Out-of-band attribute value */
 	DONT_CARE = -1

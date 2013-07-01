@@ -8,16 +8,16 @@ import (
 	"github.com/remogatto/egl/platform"
 	gl "github.com/remogatto/opengles2"
 	"log"
-	"runtime"
-	"time"
-	"syscall"
 	"os"
+	"runtime"
+	"syscall"
+	"time"
 )
 
 const FRAMES_PER_SECOND = 24
 
 var (
-	signal sigterm
+	signal                                 sigterm
 	verticesArrayBuffer, colorsArrayBuffer uint32
 	attrPos, attrColor                     uint32
 	currWidth, currHeight                  int
@@ -36,6 +36,7 @@ var (
 
 // sigterm is a type for handling a SIGTERM signal.
 type sigterm int
+
 func (h *sigterm) HandleSignal(s os.Signal) {
 	switch ss := s.(type) {
 	case syscall.Signal:

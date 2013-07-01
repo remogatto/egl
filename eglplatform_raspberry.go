@@ -4,6 +4,6 @@ package egl
 
 // The native window
 type EGLDispmanxWindow struct {
-	Element DispmanxElementHandle
+	Element       DispmanxElementHandle
 	Width, Height int
 }

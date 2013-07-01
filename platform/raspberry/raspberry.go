@@ -103,4 +103,3 @@ func Initialize(configAttr, contextAttr []int32) {
 		egl.LogError(egl.GetError())
 	}
 }
-
