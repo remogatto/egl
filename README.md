@@ -34,7 +34,13 @@ To build egl against a particular implementation use the specific
 build constraint, for example:
 
 ~~~bash
-% go get -tags=raspberry github.com/remogatto/egl # install on the raspberry
+$ go get -tags=raspberry github.com/remogatto/egl # install on the raspberry
+~~~
+
+On a debian like system you will need to install the following prerequisites:
+
+~~~bash
+$ sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
 ~~~
 
 # Usage
