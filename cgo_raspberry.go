@@ -1,3 +1,5 @@
+// +build raspberry
+
 package egl
 
 /*

@@ -1,7 +1,7 @@
 # What's that?
 
 <tt>egl</tt> is a [Go](http://golang.org) package for accessing the
-[EGL](http://en.wikipedia.org/wiki/EGL_(OpenGL)) (Embedded Graphics
+[EGL](http://en.wikipedia.org/wiki/EGL_\(OpenGL\)) (Embedded Graphics
 Library). EGL is the access door toward hardware accelerated graphics,
 through OpenGL, on many embedded devices. The project was born for
 accessing the GPU of the [Raspberry PI](http://raspberrypi.org) (check
@@ -34,7 +34,13 @@ To build egl against a particular implementation use the specific
 build constraint, for example:
 
 ~~~bash
-% go get github.com/remogatto/egl -tags="raspberry" # install on the raspberry
+$ go get -tags=raspberry github.com/remogatto/egl # install on the raspberry
+~~~
+
+On a debian like system you will need to install the following prerequisites:
+
+~~~bash
+$ sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
 ~~~
 
 # Usage
