@@ -3,21 +3,14 @@
 <tt>egl</tt> is a [Go](http://golang.org) package for accessing the
 [EGL](http://en.wikipedia.org/wiki/EGL_(OpenGL)) (Embedded Graphics
 Library). EGL is the access door toward hardware accelerated graphics,
-through OpenGL, on many platform. The project was born with the idea
-of accessing the GPU of the [Raspberry
-PI](http://raspberrypi.org). Now has been generalized to be go
-installable on other platforms too. This has the benefit that you
-could develop Open GL ES 2.0 application on your desktop computer
-using [Mesa](http://www.mesa3d.org/egl.html) and deploy them on
-embedded systems like the Raspberry PI.
+through OpenGL, on many embedded devices. The project was born for
+accessing the GPU of the [Raspberry PI](http://raspberrypi.org). Now
+has been generalized to be go installable on other platforms too. This
+has the benefit that you could develop Open GL ES 2.0 application on
+your desktop computer using [Mesa](http://www.mesa3d.org/egl.html) and
+deploy them on embedded systems like the Raspberry PI.
 
-# Features
-
-* Thread-safe (in progress)
-* Adherent to EGL API (in progress)
-* Multiplatform
-
-# Supported platform
+# Currently supported platform
 
 * Raspberry PI
 * Xorg
@@ -25,16 +18,17 @@ embedded systems like the Raspberry PI.
 # Install
 
 The package aims to be multiplatform. To achive this result two
-approaches are used: [build constraints](http://golang.org/pkg/go/build)
-and per-platform/per-implementation initialization [boilerplate
+approaches are used: [build
+constraints](http://golang.org/pkg/go/build) and
+per-platform/per-implementation initialization [boilerplate
 code](platform/). By default egl will use the xorg implementation.
 
 ~~~bash
 $ go get github.com/remogatto/egl # use xorg by default
 ~~~
 
-To build egl against a particular implementation use the build
-constraint, for example:
+To build egl against a particular implementation use the specific
+build constraint, for example:
 
 ~~~bash
 % go get github.com/remogatto/egl -tags="raspberry" # install on the raspberry
@@ -44,9 +38,9 @@ constraint, for example:
 
 Please refer to the [examples](examples/).
 
-# ToDo
+# To Do
 
-* Add support for other platforms
+* Add support for other platforms (e.g. android)
 * Add tests
 
 # Credits
