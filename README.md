@@ -4,11 +4,14 @@
 [EGL](http://en.wikipedia.org/wiki/EGL_(OpenGL)) (Embedded Graphics
 Library). EGL is the access door toward hardware accelerated graphics,
 through OpenGL, on many embedded devices. The project was born for
-accessing the GPU of the [Raspberry PI](http://raspberrypi.org). Now
-has been generalized to be go installable on other platforms too. This
-has the benefit that you could develop Open GL ES 2.0 application on
-your desktop computer using [Mesa](http://www.mesa3d.org/egl.html) and
-deploy them on embedded systems like the Raspberry PI.
+accessing the GPU of the [Raspberry PI](http://raspberrypi.org) (check
+this
+[post](https://plus.google.com/u/0/100271912081202470197/posts/LQVYfrj49qA))
+but now it has been generalized to be go installable on other
+platforms too. This has the benefit that you could develop Open GL ES
+2.0 applications on your desktop computer using
+[Mesa](http://www.mesa3d.org/egl.html) and deploy them on embedded
+systems like the Raspberry PI.
 
 # Currently supported platform
 
