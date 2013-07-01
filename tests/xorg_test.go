@@ -18,7 +18,7 @@ const (
 )
 
 var (
-	testWin    NativeWindowType
+	testWin    egl.NativeWindowType
 	X          *xgbutil.XUtil
 	configAttr = []int32{
 		egl.RED_SIZE, 8,
