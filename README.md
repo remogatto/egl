@@ -34,7 +34,7 @@ To build egl against a particular implementation use the specific
 build constraint, for example:
 
 ~~~bash
-% go get github.com/remogatto/egl -tags="raspberry" # install on the raspberry
+% go get -tags=raspberry github.com/remogatto/egl # install on the raspberry
 ~~~
 
 # Usage
