@@ -40,10 +40,10 @@ func Initialize(window egl.NativeWindowType, configAttr, contextAttr []int32) {
 		egl.LogError(egl.GetError())
 	}
 	var val int32
-	if ok := egl.QuerySurface(platform.Display, &val, egl.WIDTH, platform.Surface); !ok {
+	if ok := egl.QuerySurface(platform.Display, platform.Surface, egl.WIDTH, &val); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if ok := egl.QuerySurface(platform.Display, &val, egl.HEIGHT, platform.Surface); !ok {
+	if ok := egl.QuerySurface(platform.Display, platform.Surface, egl.HEIGHT, &val); !ok {
 		egl.LogError(egl.GetError())
 	}
 	if ok := egl.GetConfigAttrib(platform.Display, platform.Config, egl.SURFACE_TYPE, &val); !ok {

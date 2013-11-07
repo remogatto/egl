@@ -28,9 +28,14 @@ package egl
 #include <EGL/eglplatform.h>
 */
 import "C"
+
 import (
 	"unsafe"
 )
+
+func goBoolean(n C.EGLBoolean) bool {
+	return n == 1
+}
 
 func Initialize(
 	disp Display, major, minor *int32) bool {
@@ -79,8 +84,7 @@ func GetCurrentSurface(readdraw int32) Surface {
 		C.EGLint(readdraw)))
 }
 func QuerySurface(
-	disp Display, value *int32,
-	attribute int32, surface Surface) bool {
+	disp Display, surface Surface, attribute int32, value *int32) bool {
 	return goBoolean(C.eglQuerySurface(
 		C.EGLDisplay(unsafe.Pointer(disp)),
 		C.EGLSurface(unsafe.Pointer(surface)),
@@ -130,9 +134,9 @@ func CreateWindowSurface(
 	disp Display, config Config,
 	win NativeWindowType, attribList *int32) Surface {
 	return Surface(C.eglCreateWindowSurface(
-		C.EGLDisplay(unsafe.Pointer(disp)),
-		C.EGLConfig(unsafe.Pointer(config)),
-		C.EGLNativeWindowType(uintptr(win)),
+		C.EGLDisplay(disp),
+		C.EGLConfig(config),
+		C.EGLNativeWindowType(win),
 		(*C.EGLint)(attribList)))
 }
 func CreatePbufferSurface(
@@ -148,7 +152,7 @@ func CreatePixmapSurface(
 	return Surface(C.eglCreatePixmapSurface(
 		C.EGLDisplay(unsafe.Pointer(disp)),
 		C.EGLConfig(config),
-		C.EGLNativePixmapType(uintptr(pixmap)),
+		C.EGLNativePixmapType(pixmap),
 		(*C.EGLint)(attribList)))
 }
 
@@ -209,7 +213,7 @@ func CopyBuffers(
 	return goBoolean(C.eglCopyBuffers(
 		C.EGLDisplay(unsafe.Pointer(disp)),
 		C.EGLSurface(unsafe.Pointer(surface)),
-		C.EGLNativePixmapType(uintptr(target))))
+		C.EGLNativePixmapType(target)))
 }
 func SwapBuffers(
 	disp Display, surface Surface) bool {
