@@ -22,47 +22,44 @@ var (
 		egl.CONTEXT_CLIENT_VERSION, 2,
 		egl.NONE,
 	}
-	dstRect, srcRect            egl.VCRect
-	NativeWindow                egl.EGLDispmanxWindow
-	screen_width, screen_height uint32
 )
 
-func assert(cond bool) {
-	if !cond {
-		debug.PrintStack()
-		panic("Assertion failed!")
-	}
-}
-
-func Initialize(configAttr, contextAttr []int32) {
-	platform.Display = egl.GetDisplay(egl.DEFAULT_DISPLAY)
-	if ok := egl.Initialize(platform.Display, nil, nil); !ok {
+func Initialize(configAttr, contextAttr []int32) *platform.EGLState {
+	var (
+		config           egl.Config
+		numConfig        int32
+		visualId         int32
+		width, height    int32
+		dstRect, srcRect egl.VCRect
+		nativeWindow     egl.EGLDispmanxWindow
+	)
+	display := egl.GetDisplay(egl.DEFAULT_DISPLAY)
+	if ok := egl.Initialize(egl.Display, nil, nil); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if ok := egl.ChooseConfig(platform.Display, configAttr, &platform.Config, 1, &platform.NumConfig); !ok {
+	if ok := egl.ChooseConfig(display, configAttr, &config, 1, &numConfig); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if ok := egl.GetConfigAttrib(platform.Display, platform.Config, egl.NATIVE_VISUAL_ID, &platform.VisualId); !ok {
+	if ok := egl.GetConfigAttrib(display, config, egl.NATIVE_VISUAL_ID, &visualId); !ok {
 		egl.LogError(egl.GetError())
 	}
 	egl.BindAPI(egl.OPENGL_ES_API)
-	platform.Context = egl.CreateContext(platform.Display, platform.Config, egl.NO_CONTEXT, &contextAttr[0])
-	screen_width, screen_height = egl.GraphicsGetDisplaySize(0)
-	log.Printf("Display size W: %d H: %d\n", screen_width, screen_height)
+	context := egl.CreateContext(display, config, egl.NO_CONTEXT, &contextAttr[0])
+
+	width, height = egl.GraphicsGetDisplaySize(0)
 
 	dstRect.X = 0
 	dstRect.Y = 0
-	dstRect.Width = int32(screen_width)
-	dstRect.Height = int32(screen_height)
+	dstRect.Width = int32(width)
+	dstRect.Height = int32(height)
 
 	srcRect.X = 0
 	srcRect.Y = 0
-	srcRect.Width = int32(screen_width << 16)
-	srcRect.Height = int32(screen_height << 16)
+	srcRect.Width = int32(width << 16)
+	srcRect.Height = int32(height << 16)
 
-	dispman_display := egl.VCDispmanxDisplayOpen(0 /* LCD */)
+	dispman_display := egl.VCDispmanxDisplayOpen(0)
 	dispman_update := egl.VCDispmanxUpdateStart(0)
-
 	dispman_element := egl.VCDispmanxElementAdd(
 		dispman_update,
 		dispman_display,
@@ -75,31 +72,31 @@ func Initialize(configAttr, contextAttr []int32) {
 		nil, /*clamp */
 		0 /*transform */)
 
-	NativeWindow.Element = dispman_element
-	NativeWindow.Width = int(screen_width)
-	NativeWindow.Height = int(screen_height)
+	nativeWindow.Element = dispman_element
+	nativeWindow.Width = int(width)
+	nativeWindow.Height = int(height)
 	egl.VCDispmanxUpdateSubmitSync(dispman_update)
 
-	platform.Surface = egl.CreateWindowSurface(
-		platform.Display,
-		platform.Config,
-		egl.NativeWindowType(unsafe.Pointer(&NativeWindow)),
+	surface := egl.CreateWindowSurface(
+		display,
+		config,
+		egl.NativeWindowType(unsafe.Pointer(&nativeWindow)),
 		nil)
-	assert(platform.Surface != egl.NO_SURFACE)
 
-	// connect the context to the surface
-	result := egl.MakeCurrent(platform.Display, platform.Surface, platform.Surface, platform.Context)
-	assert(result)
-
-	var val int32
-	if ok := egl.QuerySurface(platform.Display, &val, egl.WIDTH, platform.Surface); !ok {
-		egl.LogError(egl.GetError())
+	if surface == egl.NO_SURFACE {
+		panic("Error in creating EGL surface")
 	}
 
-	if ok := egl.QuerySurface(platform.Display, &val, egl.HEIGHT, platform.Surface); !ok {
-		egl.LogError(egl.GetError())
-	}
-	if ok := egl.GetConfigAttrib(platform.Display, platform.Config, egl.SURFACE_TYPE, &val); !ok {
-		egl.LogError(egl.GetError())
+	return &platform.EGLState{
+		Display:           display,
+		Config:            config,
+		Context:           context,
+		Surface:           surface,
+		NumConfig:         numConfig,
+		VisualId:          visualId,
+		ContextAttributes: contextAttr,
+		ConfigAttributes:  configAttr,
+		SurfaceWidth:      int(width),
+		SurfaceHeight:     int(height),
 	}
 }
