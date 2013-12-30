@@ -22,37 +22,53 @@ var (
 	}
 )
 
-func Initialize(window egl.NativeWindowType, configAttr, contextAttr []int32) {
-	platform.Display = egl.GetDisplay(egl.DEFAULT_DISPLAY)
-	if ok := egl.Initialize(platform.Display, nil, nil); !ok {
+func Initialize(window egl.NativeWindowType, configAttr, contextAttr []int32) *platform.EGLState {
+	var (
+		config        egl.Config
+		numConfig     int32
+		visualId      int32
+		width, height int32
+	)
+	display := egl.GetDisplay(egl.DEFAULT_DISPLAY)
+	if ok := egl.Initialize(display, nil, nil); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if ok := egl.ChooseConfig(platform.Display, configAttr, &platform.Config, 1, &platform.NumConfig); !ok {
+	if ok := egl.ChooseConfig(display, configAttr, &config, 1, &numConfig); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if ok := egl.GetConfigAttrib(platform.Display, platform.Config, egl.NATIVE_VISUAL_ID, &platform.VisualId); !ok {
+	if ok := egl.GetConfigAttrib(display, config, egl.NATIVE_VISUAL_ID, &visualId); !ok {
 		egl.LogError(egl.GetError())
 	}
 	egl.BindAPI(egl.OPENGL_ES_API)
-	platform.Context = egl.CreateContext(platform.Display, platform.Config, egl.NO_CONTEXT, &contextAttr[0])
-	platform.Surface = egl.CreateWindowSurface(platform.Display, platform.Config, window, nil)
-	if ok := egl.MakeCurrent(platform.Display, platform.Surface, platform.Surface, platform.Context); !ok {
-		egl.LogError(egl.GetError())
-	}
+	context := egl.CreateContext(display, config, egl.NO_CONTEXT, &contextAttr[0])
+	surface := egl.CreateWindowSurface(display, config, window, nil)
+
 	var val int32
-	if ok := egl.QuerySurface(platform.Display, platform.Surface, egl.WIDTH, &val); !ok {
+	if ok := egl.QuerySurface(display, surface, egl.WIDTH, &width); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if ok := egl.QuerySurface(platform.Display, platform.Surface, egl.HEIGHT, &val); !ok {
+	if ok := egl.QuerySurface(display, surface, egl.HEIGHT, &height); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if ok := egl.GetConfigAttrib(platform.Display, platform.Config, egl.SURFACE_TYPE, &val); !ok {
+	if ok := egl.GetConfigAttrib(display, config, egl.SURFACE_TYPE, &val); !ok {
 		egl.LogError(egl.GetError())
 	}
-	if ok := egl.GetConfigAttrib(platform.Display, platform.Config, egl.SURFACE_TYPE, &val); !ok {
+	if ok := egl.GetConfigAttrib(display, config, egl.SURFACE_TYPE, &val); !ok {
 		egl.LogError(egl.GetError())
 	}
 	if (val & egl.WINDOW_BIT) == 0 {
 		panic("No WINDOW_BIT")
+	}
+	return &platform.EGLState{
+		Display:           display,
+		Config:            config,
+		Context:           context,
+		Surface:           surface,
+		NumConfig:         numConfig,
+		VisualId:          visualId,
+		ContextAttributes: contextAttr,
+		ConfigAttributes:  configAttr,
+		SurfaceWidth:      int(width),
+		SurfaceHeight:     int(height),
 	}
 }

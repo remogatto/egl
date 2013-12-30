@@ -45,7 +45,8 @@ $ sudo apt-get install libegl1-mesa-dev libgles2-mesa-dev
 
 # Usage
 
-Please refer to the [examples](examples/).
+Please refer to the
+[examples](https://github.com/remogatto/egl-examples/).
 
 # To Do
 
@@ -54,7 +55,9 @@ Please refer to the [examples](examples/).
 
 # Credits
 
-Thanks to Roger Roach for his [egl/opengles](https://github.com/mortdeus/egles) libraries. I stole a lot from his repository!
+Thanks to Roger Roach for his
+[egl/opengles](https://github.com/mortdeus/egles) libraries. I stole a
+lot from his repository!
 
 # License
 

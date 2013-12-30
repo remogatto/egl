@@ -23,44 +23,54 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 package egl
 
-import "log"
-import "strconv"
+import (
+	"log"
+	"strconv"
+)
+
+type Error struct {
+	eglError int32
+}
+
+func NewError(eglError int32) *Error {
+	return &Error{eglError}
+}
+
+func (e Error) Error() string {
+	switch e.eglError {
+	case NOT_INITIALIZED:
+		return "Not Intialized"
+	case BAD_ACCESS:
+		return "Bad Access"
+	case BAD_ALLOC:
+		return "Bad Allocate"
+	case BAD_ATTRIBUTE:
+		return "Bad Attribute"
+	case BAD_CONFIG:
+		return "Bad Config"
+	case BAD_CONTEXT:
+		return "Bad Context"
+	case BAD_DISPLAY:
+		return "Bad Display"
+	case BAD_MATCH:
+		return "Bad Match"
+	case BAD_PARAMETER:
+		return "Bad Parameter"
+	case BAD_SURFACE:
+		return "Bad Surface"
+	case BAD_CURRENT_SURFACE:
+		return "Bad Current Surface"
+	case BAD_NATIVE_PIXMAP:
+		return "Bad Native Pixmap"
+	case BAD_NATIVE_WINDOW:
+		return "Bad Native Window"
+	case SUCCESS:
+		return "Success"
+	default:
+		return strconv.Itoa(int(e.eglError))
+	}
+}
 
 func LogError(msg int32) {
-	log.SetPrefix("[EGL] Error: ")
-	var s string
-	switch msg {
-	case NOT_INITIALIZED:
-		s = "Not Intialized"
-	case BAD_ACCESS:
-		s = "Bad Access"
-	case BAD_ALLOC:
-		s = "Bad Allocate"
-	case BAD_ATTRIBUTE:
-		s = "Bad Attribute"
-	case BAD_CONFIG:
-		s = "Bad Config"
-	case BAD_CONTEXT:
-		s = "Bad Context"
-	case BAD_DISPLAY:
-		s = "Bad Display"
-	case BAD_MATCH:
-		s = "Bad Match"
-	case BAD_PARAMETER:
-		s = "Bad Parameter"
-	case BAD_SURFACE:
-		s = "Bad Surface"
-	case BAD_CURRENT_SURFACE:
-		s = "Bad Current Surface"
-	case BAD_NATIVE_PIXMAP:
-		s = "Bad Native Pixmap"
-	case BAD_NATIVE_WINDOW:
-		s = "Bad Native Window"
-	case SUCCESS:
-		s = "Success"
-	default:
-		s = strconv.Itoa(int(msg))
-	}
-	log.Println(s)
-	panic("panicked!")
+	log.Println(NewError(msg).Error())
 }
