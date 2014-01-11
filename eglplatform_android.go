@@ -41,6 +41,6 @@ type (
 	Surface           uintptr
 	ClientBuffer      uintptr
 	NativeDisplayType unsafe.Pointer
-	NativeWindowType  unsafe.Pointer
-	NativePixmapType  unsafe.Pointer
+	NativeWindowType  uintptr
+	NativePixmapType  uintptr
 )

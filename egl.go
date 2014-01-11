@@ -244,6 +244,9 @@ func ReleaseThread() bool {
 func GetCurrentDisplay() Display {
 	return Display(C.eglGetCurrentDisplay())
 }
+func GetCurrentContext() Context {
+	return Context(C.eglGetCurrentContext())
+}
 func GetError() int32 {
 	return int32(C.eglGetError())
 }
