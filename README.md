@@ -17,6 +17,7 @@ systems like the Raspberry PI.
 
 * Raspberry PI
 * Xorg
+* Android (see [Mandala](https://github.com/remogatto/mandala))
 
 # Install
 
