@@ -3,9 +3,9 @@
 package android
 
 import (
+	"unsafe"
 	"github.com/remogatto/egl"
 	"github.com/remogatto/egl/platform"
-	"unsafe"
 )
 
 // #include <android/native_window.h>
@@ -80,8 +80,10 @@ func Initialize(win unsafe.Pointer, configAttr, contextAttr []int32) *platform.E
 	eglState.VisualId = getEGLNativeVisualId(eglState.Display, eglState.Config)
 	C.ANativeWindow_setBuffersGeometry((*[0]byte)(win), 0, 0, C.int32_t(eglState.VisualId))
 	eglState.Surface = EGLCreateWindowSurface(eglState.Display, eglState.Config, egl.NativeWindowType(win))
-	egl.QuerySurface(eglState.Display, eglState.Surface, egl.WIDTH, &width)
-	egl.QuerySurface(eglState.Display, eglState.Surface, egl.HEIGHT, &height)
+
+	width = int32(C.ANativeWindow_getWidth((*C.ANativeWindow)(win)))
+	height = int32(C.ANativeWindow_getHeight((*C.ANativeWindow)(win)))
+
 	egl.BindAPI(egl.OPENGL_ES_API)
 	eglState.Context = egl.CreateContext(eglState.Display, eglState.Config, egl.NO_CONTEXT, &contextAttr[0])
 	eglState.SurfaceWidth = int(width)
