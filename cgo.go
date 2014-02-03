@@ -1,4 +1,4 @@
-// +build !raspberry !android
+// +build !raspberry, !android
 
 package egl
 
