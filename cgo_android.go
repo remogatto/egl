@@ -1,9 +1,8 @@
-// +build !raspberry !android
+// +build android
 
 package egl
 
 /*
-#cgo pkg-config: egl
 #include <EGL/egl.h>
 #include <EGL/eglplatform.h>
 */

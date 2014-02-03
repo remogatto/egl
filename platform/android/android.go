@@ -73,7 +73,6 @@ func chooseEGLConfig(eglDisp egl.Display, configAttr []int32) egl.Config {
 }
 
 func Initialize(win unsafe.Pointer, configAttr, contextAttr []int32) *platform.EGLState {
-	var width, height int32
 	eglState := new(platform.EGLState)
 	eglState.Display = getEGLDisp(egl.DEFAULT_DISPLAY)
 	eglState.Config = chooseEGLConfig(eglState.Display, configAttr)
@@ -81,12 +80,11 @@ func Initialize(win unsafe.Pointer, configAttr, contextAttr []int32) *platform.E
 	C.ANativeWindow_setBuffersGeometry((*[0]byte)(win), 0, 0, C.int32_t(eglState.VisualId))
 	eglState.Surface = EGLCreateWindowSurface(eglState.Display, eglState.Config, egl.NativeWindowType(win))
 
-	width = int32(C.ANativeWindow_getWidth((*C.ANativeWindow)(win)))
-	height = int32(C.ANativeWindow_getHeight((*C.ANativeWindow)(win)))
-
 	egl.BindAPI(egl.OPENGL_ES_API)
 	eglState.Context = egl.CreateContext(eglState.Display, eglState.Config, egl.NO_CONTEXT, &contextAttr[0])
-	eglState.SurfaceWidth = int(width)
-	eglState.SurfaceHeight = int(height)
+
+	eglState.SurfaceWidth = int(C.ANativeWindow_getWidth((*C.ANativeWindow)(win)))
+	eglState.SurfaceHeight = int(C.ANativeWindow_getHeight((*C.ANativeWindow)(win)))
+
 	return eglState
 }
